@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cbaee2db-ad58-4c65-85ce-827bf8615b07" name="Changes" comment=".idea deleted">
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/job4j/Links.sql" beforeDir="false" />
+    <list default="true" id="cbaee2db-ad58-4c65-85ce-827bf8615b07" name="Changes" comment="0.1. Связи между таблицами [#373615 #390350]">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +50,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/projects/db/pom.xml",
+    "last_opened_file_path": "C:/projects/db",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
@@ -59,6 +59,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\projects\db" />
       <recent name="C:\Users\elise\IdeaProjects\db" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -141,7 +142,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676035744203</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="0.1. Связи между таблицами [#373615 #390350]">
+      <created>1676041793515</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1676041793515</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -160,6 +168,7 @@
     <MESSAGE value="upd" />
     <MESSAGE value="0.1. Связи между таблицами [#373615]" />
     <MESSAGE value=".idea deleted" />
-    <option name="LAST_COMMIT_MESSAGE" value=".idea deleted" />
+    <MESSAGE value="0.1. Связи между таблицами [#373615 #390350]" />
+    <option name="LAST_COMMIT_MESSAGE" value="0.1. Связи между таблицами [#373615 #390350]" />
   </component>
 </project>
