@@ -95,4 +95,3 @@ create table attachs (
 );
 
 insert into attachs(id, items_id, name, size) values (1, 1, 'coffee_spil', 100);
-insert into attachs(id, items_id, name, size) values (2, 2, 'AI', 100);
