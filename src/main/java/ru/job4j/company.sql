@@ -48,10 +48,25 @@ insert into roles_rules (id, role_id, rule_id) values (2, 40, 0);
 select * from roles_rules;
 
 create table comments (
-	id INT primary key,
+	id INT primary key references items(comment_id),
 	content TEXT,
 	likes INT
 );
+
+create table items (
+	id INT primary key,
+	state_type TEXT references state(type),
+	category_id INT references category(id),
+	user_id INT references users(id),
+	content TEXT,
+	attach_id INT UNIQUE,
+	comment_id INT UNIQUE
+);
+
+insert into items (id, state_type, category_id, user_id, content, attach_id, comment_id)
+values			  (1, 'on schedule', 2, 1, 'db creation', 2, 34);
+insert into items (id, state_type, category_id, user_id, content, attach_id, comment_id)
+values			  (2, 'delayed', 1, 5, 'endless meetings', 1, 33);
 
 insert into comments(id, content, likes) values (33, 'faster', 666);
 insert into comments(id, content, likes) values (34, 'ahead of schedule', 777);
@@ -77,25 +92,10 @@ insert into category (id, name) values (3, 'canceled');
 select * from category;
 
 create table attachs (
-	id INT primary key,
+	id INT references items(attach_id) primary key,
 	name TEXT,
 	size INT
 );
 
 insert into attachs(id, name, size) values (1, 'coffee_spil', 100);
 insert into attachs(id, name, size) values (2, 'AI', 100);
-
-create table items (
-	id INT primary key,
-	state_type TEXT references state(type),
-	category_id INT references category(id),
-	user_id INT references users(id),
-	content TEXT,
-	attach_id INT references attachs(id),
-	comment_id INT references comments(id)
-);
-
-insert into items (id, state_type, category_id, user_id, content, attach_id, comment_id)
-values			  (1, 'on schedule', 2, 1, 'db creation', 2, 34);
-insert into items (id, state_type, category_id, user_id, content, attach_id, comment_id)
-values			  (2, 'delayed', 1, 5, 'endless meetings', 1, 33);
