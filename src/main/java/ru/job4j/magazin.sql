@@ -61,7 +61,7 @@ insert into product (id, name, type_id, expired_date, price) values (32, 'Тор
 insert into product (id, name, type_id, expired_date, price) values (33, 'Мороженное Коровка', 6, '2023-05-01', 100);
 insert into product (id, name, type_id, expired_date, price) values (34, 'Мороженное Вологодское', 6, '2023-05-01', 200);
 insert into product (id, name, type_id, expired_date, price) values (36, 'Мороженное Лёд', 6, '2023-05-01', 200);
-
+insert into product (id, name, type_id, expired_date, price) values (38, 'Мороженное 6000Rub', 6, '2023-4-01', 6000);
 --1 запрос получение всех продуктов с типом "СЫР" --
 
 select t.name, p.type_id, p.name, p.price, p.expired_date
@@ -91,7 +91,7 @@ order by p.expired_date ASC;
 
 --4 запрос, который выводит самый дорогой продукт--
 
-select MAX(price) from product;
+select p.name, p.price, p.expired_date from product as p where price = (select MAX(price) from product);
 
 --5 запрос, выводит для каждого типа количество продуктов--
 --к нему принадлежащих. В виде имя_типа, количество--
