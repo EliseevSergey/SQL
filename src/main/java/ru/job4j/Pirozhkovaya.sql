@@ -104,10 +104,8 @@ join pirozhki as p on p.id = ol.pirozhok_id
 join bakers as b on p.baker_id = b.id;
 
 select * from total_bakery_info;
-drop view total_bakery_info;
 
---2 Представления для сумарной стоимости каждого заказа
-
+--2 Представления для сумарной стоимости каждого заказа (в заказе могут быть разные пироги)
 create view orders_sum as
 select po.id as po_id, date, po.client_id as client_id, c.name as customer,
 sum(p.price * ol.qty)
@@ -122,17 +120,31 @@ select * from orders_sum;
 
 --3  Представление для поиска самого дорого заказа
 
+create view top_order as
 select po.id as po_id, date, po.client_id as client_id, c.name as customer,
-sum(p.price * ol.qty), max(p.price * ol.qty)
+sum(p.price * ol.qty)
 from po
 join clients as c on c.id = po.client_id
 join order_list as ol on ol.order_list_id = po.id
 join pirozhki as p on p.id = ol.pirozhok_id
-group by po_id, date, client_id, customer;
+group by po_id, date, client_id, customer
+order by sum(p.price * ol.qty) DESC
+limit 1;
+--у меня не получилось сделать поиск самого дорогостоющего заказа
+--пробовал подзапросы, но так и не получилось, так как колонка sum уже агрегатная
+--и к ней не получается применить агрегатный МАХ еще раз  MAX(sum(p.price * ol.qty))
+--помогите.
+select * from top_order;
 
-
---3 Поиск всех заказов с Шавермой
-select po.id as po_id, date, po.client_id as client_id, c.name as customer from po
+--4 Поиск всех заказов с Шавермой
+create view shawarma_po as
+select po.id as po_id, date, po.client_id as client_id, c.name as customer ,p.title as pirozhok,
+p.price as "price for 1",  ol.qty, p.price * ol.qty as "TOTAL"
+from po
 join clients as c on c.id = po.client_id
 join order_list as ol on ol.order_list_id = po.id
-join pirozhki as p on p.id = ol.pirozhok_id;
+join pirozhki as p on p.id = ol.pirozhok_id
+where p.title = 'Shawarma'
+order by qty DESC;
+
+select * from shawarma_po;
