@@ -91,7 +91,8 @@ order by p.expired_date ASC;
 
 --4 запрос, который выводит самый дорогой продукт--
 
-select p.name, p.price, p.expired_date from product as p where price = (select MAX(price) from product);
+select p.name, p.price, p.expired_date from product as p
+ where price = (select MAX(price) from product);
 
 --5 запрос, выводит для каждого типа количество продуктов--
 --к нему принадлежащих. В виде имя_типа, количество--

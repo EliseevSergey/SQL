@@ -38,7 +38,6 @@ create table clients(
     id serial primary key,
     name TEXT
 );
-drop table clients cascade;
 
 insert into clients (name) values ('Megan Fox');
 insert into clients (name) values ('Greta Thunberg');
@@ -54,7 +53,6 @@ create table po(
     date DATE
 );
 
-drop table po cascade;
 create table order_list (
     order_list_id INT references po(id),
     pirozhok_id INT references pirozhki(id),
@@ -80,16 +78,6 @@ insert into order_list (order_list_id, pirozhok_id, qty) values (4, 4, 3);
 insert into order_list (order_list_id, pirozhok_id, qty) values (4, 5, 4);
 insert into order_list (order_list_id, pirozhok_id, qty) values (5, 5, 2);
 
---TOTAL NEW
-select po.id as po_id, date, po.client_id as client_id, c.name as customer
-, ol.pirozhok_id, p.title, p.price as "price for 1",  ol.qty, p.price * ol.qty as "TOTAL",
-b.id as baker_id, b.surname as baker
-from po as po
-join clients as c on c.id = po.client_id
-join order_list as ol on ol.order_list_id = po.id
-join pirozhki as p on p.id = ol.pirozhok_id
-join bakers as b on p.baker_id =b.id;
-
 --no alliance--
 select * from pirozhki inner join bakers on pirozhki.baker_id = bakers.id;
 
@@ -103,4 +91,48 @@ p join bakers as b on p.baker_id = b.id;
 select b.surname Пекарь, b.country Страна, p.sop as "Старт Продаж" from pirozhki as
 p join bakers as b on p.baker_id = b.id;
 
+--Создание представлений
+--1 Представление для всей доступной информации по пирожковой
+create view total_bakery_info
+as select po.id as po_id, date, po.client_id as client_id, c.name as customer
+, ol.pirozhok_id, p.title as pirozhok, p.price as "price for 1",  ol.qty, p.price * ol.qty as "TOTAL",
+b.id as baker_id, b.surname as baker
+from po as po
+join clients as c on c.id = po.client_id
+join order_list as ol on ol.order_list_id = po.id
+join pirozhki as p on p.id = ol.pirozhok_id
+join bakers as b on p.baker_id = b.id;
 
+select * from total_bakery_info;
+drop view total_bakery_info;
+
+--2 Представления для сумарной стоимости каждого заказа
+
+create view orders_sum as
+select po.id as po_id, date, po.client_id as client_id, c.name as customer,
+sum(p.price * ol.qty)
+from po
+join clients as c on c.id = po.client_id
+join order_list as ol on ol.order_list_id = po.id
+join pirozhki as p on p.id = ol.pirozhok_id
+group by po_id, date, client_id, customer
+order by sum(p.price * ol.qty) DESC;
+
+select * from orders_sum;
+
+--3  Представление для поиска самого дорого заказа
+
+select po.id as po_id, date, po.client_id as client_id, c.name as customer,
+sum(p.price * ol.qty), max(p.price * ol.qty)
+from po
+join clients as c on c.id = po.client_id
+join order_list as ol on ol.order_list_id = po.id
+join pirozhki as p on p.id = ol.pirozhok_id
+group by po_id, date, client_id, customer;
+
+
+--3 Поиск всех заказов с Шавермой
+select po.id as po_id, date, po.client_id as client_id, c.name as customer from po
+join clients as c on c.id = po.client_id
+join order_list as ol on ol.order_list_id = po.id
+join pirozhki as p on p.id = ol.pirozhok_id;
