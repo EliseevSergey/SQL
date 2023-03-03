@@ -72,8 +72,8 @@ insert into order_list (order_list_id, pirozhok_id, qty) values (1, 1, 4);
 insert into order_list (order_list_id, pirozhok_id, qty) values (1, 5, 2);
 insert into order_list (order_list_id, pirozhok_id, qty) values (2, 2, 4);
 insert into order_list (order_list_id, pirozhok_id, qty) values (2, 5, 2);
-insert into order_list (order_list_id, pirozhok_id, qty) values (3, 3, 2);
-insert into order_list (order_list_id, pirozhok_id, qty) values (3, 5, 1);
+insert into order_list (order_list_id, pirozhok_id, qty) values (3, 3, 4);
+insert into order_list (order_list_id, pirozhok_id, qty) values (3, 5, 3);
 insert into order_list (order_list_id, pirozhok_id, qty) values (4, 4, 3);
 insert into order_list (order_list_id, pirozhok_id, qty) values (4, 5, 4);
 insert into order_list (order_list_id, pirozhok_id, qty) values (5, 5, 2);
@@ -105,36 +105,33 @@ join bakers as b on p.baker_id = b.id;
 
 select * from total_bakery_info;
 
---2 Представления для сумарной стоимости каждого заказа (в заказе могут быть разные пироги)
+--2 Представления для суммарной стоимости каждого заказа (в заказе могут быть разные пироги)
 create view orders_sum as
 select po.id as po_id, date, po.client_id as client_id, c.name as customer,
-sum(p.price * ol.qty)
+    sum(p.price * ol.qty) as top_sum
 from po
-join clients as c on c.id = po.client_id
-join order_list as ol on ol.order_list_id = po.id
-join pirozhki as p on p.id = ol.pirozhok_id
+    join clients as c on c.id = po.client_id
+    join order_list as ol on ol.order_list_id = po.id
+    join pirozhki as p on p.id = ol.pirozhok_id
 group by po_id, date, client_id, customer
 order by sum(p.price * ol.qty) DESC;
 
 select * from orders_sum;
 
 --3  Представление для поиска самого дорого заказа
-
+--заготовка
 create view top_order as
 select po.id as po_id, date, po.client_id as client_id, c.name as customer,
-sum(p.price * ol.qty)
+sum(p.price * ol.qty) as top_sum
 from po
-join clients as c on c.id = po.client_id
-join order_list as ol on ol.order_list_id = po.id
-join pirozhki as p on p.id = ol.pirozhok_id
+    join clients as c on c.id = po.client_id
+    join order_list as ol on ol.order_list_id = po.id
+    join pirozhki as p on p.id = ol.pirozhok_id
 group by po_id, date, client_id, customer
-order by sum(p.price * ol.qty) DESC
-limit 1;
---у меня не получилось сделать поиск самого дорогостоющего заказа
---пробовал подзапросы, но так и не получилось, так как колонка sum уже агрегатная
---и к ней не получается применить агрегатный МАХ еще раз  MAX(sum(p.price * ol.qty))
---помогите.
-select * from top_order;
+order by top_sum;
+
+-- сам запрос на самый дорогой заказ
+select * from top_order where top_sum = (select max(top_sum) from orders_sum);
 
 --4 Поиск всех заказов с Шавермой
 create view shawarma_po as
@@ -148,3 +145,4 @@ where p.title = 'Shawarma'
 order by qty DESC;
 
 select * from shawarma_po;
+
