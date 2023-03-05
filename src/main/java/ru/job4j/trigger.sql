@@ -10,8 +10,7 @@ create or replace function discount()
     returns trigger as
 $$
     BEGIN
-        update products
-        set price = price - price * 0.2
+        update products set price = price - price * 0.2
         where count <= 5 AND id = new.id;
         return NEW;
     END;
@@ -35,7 +34,11 @@ VALUES ('product_3', 'producer_3', 666, 1000);
 insert into products (name, producer, count, price)
 VALUES ('product_4', 'producer_4', 777, 1000);
 
-select * from products;
+insert into products (name, producer, count, price)
+VALUES ('product_5', 'producer_5', 888, 1000);
+
+select * from products
+order by id DESC;
 
 create trigger tax_trigger
     after insert on products
@@ -65,7 +68,7 @@ create or replace function tax_add_statement()
 $$
     BEGIN
         update products
-        set price = price + price * 0.2
+        set price = price + 0.2 * price
         where id = (select id from inserted);
         return new;
     END;
@@ -81,14 +84,11 @@ create trigger tax_adder_trigger
 --2) Триггер должен срабатывать до вставки данных и насчитывать налог на товар
 --(нужно прибавить налог к цене товара). Здесь используем row уровень.
 
-
 create or replace function tax_add_row()
     returns trigger as
 $$
     BEGIN
-        update products
-        set price = price + price * 0.3
-        where id = new.id;
+        new.price = new.price + new.price * 0.3;
         return new;
     END;
 $$
