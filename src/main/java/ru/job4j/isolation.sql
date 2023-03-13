@@ -10,8 +10,31 @@ insert into cellphones (brand, model, price, qty) values ('Siemens', 'A52', 100,
 insert into cellphones (brand, model, price, qty) values ('Ericson', 'T100', 400, 13);
 select * from cellphones;
 
-BEGIN transaction isolation level serializable;
+set session characteristics as transaction isolation level serializable;
+BEGIN;
+insert into cellphones (brand, model, price, qty) values ('Added_for_further_Rollback', 'rollbacker', 100, 4);
+
 select * from cellphones;
-select sum(qty) from cellphones;
-update cellphones set qty = 5000 where brand = 'Siemens';
-COMMIT;
+
+savepoint first_save;
+select * from cellphones;
+
+insert into cellphones (brand, model, price, qty) values ('Added_for_further_Rollback2', 'rollbacker',  400, 13);
+insert into cellphones (brand, model, price, qty) values ('Added_for_further_Rollback2', 'rollbacker',  400, 13);
+insert into cellphones (brand, model, price, qty) values ('Added_for_further_Rollback2', 'rollbacker',  400, 13);
+
+savepoint second_save;
+select * from cellphones;
+delete from cellphones where brand = 'rollbacker';
+select * from cellphones;
+
+savepoint second_save;
+select * from cellphones;
+
+rollback to savepoint second_save;
+select * from cellphones;
+delete from cellphones;
+
+release first_save;
+release second_save;
+commit;
