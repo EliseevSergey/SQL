@@ -40,7 +40,7 @@ order by title;
 -- выведите все уникальные названия произведений
 --(т.е фильмы, которые сняты не по книге, и книги без экранизации)
 
-(select name from movie
+(select name as Фильм from movie
 except
 select title from book)
 union
