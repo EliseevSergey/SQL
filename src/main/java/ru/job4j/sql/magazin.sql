@@ -90,6 +90,7 @@ where p.expired_date < 'TODAY'
 order by p.expired_date ASC;
 
 --4 запрос, который выводит самый дорогой продукт--
+select MAX(price) from product;
 
 select p.name, p.price, p.expired_date from product as p
  where price = (select MAX(price) from product);
