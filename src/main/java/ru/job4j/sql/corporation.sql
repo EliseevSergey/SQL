@@ -34,6 +34,22 @@ select p.id as person_id, p.name, p.company_id as work_place_id, c.id as company
  from person as p left join company as c on p.company_id = c.id where p.company_id <> 5 or p.company_id is null order by p.id ASC;
 
 --2. Company list with maximum employees quantity
+select c.name, count(p.company_id) from company as c
+join person as p on c.id = p.company_id
+group by c.name
+having count(p.company_id) = (
+    select count(company_id) as c from person
+    group by company_id
+    order by c DESC
+    limit 1
+);
+
+/*
+BELOW JUST FOR REMINDER. THIS IS NOT HOW IT'S TO BE DONE.
+SEE ABOBE FOR CORRECT SHORT WAY
+Company list with maximum employees quantity
+*/
+
 select max_staff_qty, company
  from (
  select count(p.name) as max_staff_qty, c.name as company
