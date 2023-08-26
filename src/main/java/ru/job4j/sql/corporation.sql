@@ -40,8 +40,7 @@ group by c.name
 having count(p.company_id) = (
     select count(company_id) as c from person
     group by company_id
-    order by c DESC
-    limit 1
+    order by c DESC limit 1
 );
 
 /*

@@ -33,6 +33,7 @@ insert into pirozhki(id, title, weight, vegan, price, baker_id, sop)
 values(5,'Shawarma', 600, false, 200, 5, '2022-01-01');
 
 select * from pirozhki;
+select * from clients;
 
 create table clients(
     id serial primary key,
